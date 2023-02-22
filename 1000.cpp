@@ -1,7 +1,9 @@
-﻿#include <iostream>
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <random>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
 class Bin
@@ -32,7 +34,6 @@ public:
 		ifstream readfile("c:\\tmp\\BIN1000.txt"); // open BIN
 		string content;
 		ofstream file("c:\\tmp\\DEC1000.txt"); // create DEC
-		cout << content << "\n";
 		while (getline(readfile, content)) {
 			unsigned long long decimal = stoull(content, 0, 2);
 			file << decimal << "\n";
@@ -61,6 +62,59 @@ public:
 		}
 	}
 };
+class Sorting
+{
+public:
+	vector<int> v;
+
+	void remove(std::vector<int>& v)
+	{
+		auto end = v.end();
+		for (auto it = v.begin(); it != end; ++it) {
+			end = std::remove(it + 1, end, *it);
+		}
+
+		v.erase(end, v.end());
+	}
+
+	void Ascending()
+	{
+		
+		ifstream read("c:\\tmp\\DEC1000.txt"); // open DEC
+		string nums;
+
+		while (getline(read, nums)) {
+
+			int integers = stoi(nums);
+			v.push_back(integers);
+		}
+		sort(v.begin(), v.end());
+		ofstream f("c:\\tmp\\s.ascending1000.txt");
+		f << "Sorted (ascending): " << "\n";
+		remove(v);
+		for (auto x : v) {
+			f << x << "\n";
+		}
+	}
+	void Descending()
+	{
+		ifstream read("c:\\tmp\\DEC1000.txt"); // open DEC
+		string nums;
+		
+		while (getline(read, nums)) {
+			int integers = stoi(nums);
+			v.push_back(integers);
+		}
+		sort(v.begin(), v.end(), greater<int>());
+
+		ofstream f2("c:\\tmp\\s.descending1000.txt");
+		f2 << "Sorted (descending): " << "\n";
+		remove(v);
+		for (auto x : v) {
+			f2 << x << "\n";
+		}
+	}
+};
 int main()
 {
 	Bin a;
@@ -69,5 +123,7 @@ int main()
 	b.Output();
 	Test c;
 	c.Comparison();
+	Sorting d;
+	d.Ascending();
+	d.Descending();
 	return 0;
-}
